@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Hello PDF.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+      <script type="text/javascript" src="https://cdn.rawgit.com/mozilla/pdf.js/master/web/pdfjs.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.6.416/pdf.js"></script>
+  <style type="text/css">
+    
+  </style>
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">
+    // 使用PDFJS.getDocument('xxx.pdf')來取得要顯示PDF的檔案
+    // 透過pdf.numPages來取得總頁數
+    // 透過pdf.getPage(pageNum)來取得每一個PDF頁面
+    // 利用page.render()將PDF內容產生到canvas上
+    // 最後再把canvas加入pdf-container中
+
+    window.onload=function(){
+      
+PDFJS.getDocument('https://cdn.rawgit.com/mozilla/pdf.js/master/web/compressed.tracemonkey-pldi-09.pdf').then(function(pdf) {
+  for (var pageNum = 1; pageNum < pdf.numPages; ++pageNum) {
+    pdf.getPage(pageNum).then(function(page) {
+      // you can now use *page* here
+
+      var scale = 1.5;
+      var viewport = page.getViewport(1);
+
+      var canvas = document.createElement('canvas');
+      var context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      var renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
+      page.render(renderContext);
+
+      document.getElementById('pdf-container').appendChild(canvas);
+    });
+  }
+})
+
+    }
+
+</script>
+
+</head>
+<body>
+  <div id="pdf-container"></div>
+</body>
+</html>
